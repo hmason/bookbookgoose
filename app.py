@@ -1,13 +1,25 @@
 import os
-from flask import Flask
+import csv
+import json
+from flask import *
 
 app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    return 'Hello World!'
+    url_for('static', filename='css/bootstrap.css')
+    return render_template('br.html')
+
+@app.route('/v1/get_books', methods=['GET'])
+def get_books():
+    n = int(request.args.get('n', 10)) # get n items, or 10 by default
+
+    r = csv.reader(open('sample_books.csv'))
+    books = [row for row in r]
+    return json.dumps(books[0:n])
 
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
     port = int(os.environ.get('PORT', 5000))
+    app.debug = True # DEBUG
     app.run(host='0.0.0.0', port=port)

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>bookbookgoose -- browse books, randomly</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Hilary Mason">
+    <!-- hello! you're looking at my code. Why did you do that? It's not that pretty. -->
+
+    <link href="static/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      #book_cover {
+        float:left;
+        margin:5px 10px 0 0;
+      }
+      #book_desc {
+        font-size=90%;
+       }
+       #book_next {
+         margin-top:2px;
+       }
+       .book_link {
+         color:#333;
+       }
+       .book_link:hover {
+         color:#333;
+         text-decoration:none;
+       }
+       #buyme_link {
+         float:right;
+         color:#08C;
+         padding-top:12px;
+        }
+    </style>
+    <link href="static/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="ico/favicon.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">bookbookgoose - browse books, randomly</a> <!-- TODO: (<a href="">why??</a>) -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="hero-unit">
+        <a target="_blank" class="book_link" id="buyme_link" href="#">read me</a>
+        <h2 id="book_title"><a target="_blank" class="book_link" id="book_title_link" href="http://www.amazon.com/Fairy-Tales-Every-Child-Should/dp/1162620455%3FSubscriptionId%3D1XJTRNMGKSD3T57YM002%26tag%3Dquasika-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1162620455"> Every Child Should Know</a></h2>
+        <p id="book_author">Hamilton Wright Mabie</p>
+        <a target="_blank" class="book_link" href="http://www.amazon.com/Fairy-Tales-Every-Child-Should/dp/1162620455%3FSubscriptionId%3D1XJTRNMGKSD3T57YM002%26tag%3Dquasika-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1162620455">
+          <img src="http://ecx.images-amazon.com/images/I/21fvl74O91L.jpg" id="book_cover" width="200" />
+         </a>
+        <p id="book_desc">1905. This volume contains a collection of fairy tales from a wide array of classical works, which we have grown up throughout time. These tales are immortal and include the following: Enchanted Stag; Twelve Brothers; Puss in Boots; Jack and the Beanstalk; Princess on the Pea; Ugly Duckling; Light Princess; Beauty and the Beast; Hansel and Gretel; Jack the Giant Killer; Second Voyage of Sinbad the Sailor; Story of Aladdin, or the Wonderful Lamp. Illustrated.</p>
+        <div style="clear:both;"></div>
+        <p><a class="btn btn-primary btn-large" id="book_next">Next &raquo;</a></p>
+      </div>
+
+      <div class="row">
+        <div class="span6">
+          <h2>What is this?</h2>
+          <p>Do you miss wandering into a bookstore and finding things that would delight you?</p>
+        </div>
+        <div class="span6">
+          <h3>How does it work?</h3>
+          <p>Many thanks to boostrap, flask, heroku, jquery, amazon, coffee, and literature.</p>
+       </div>
+      </div>
+
+      <hr>
+
+      <footer>
+        <p>&copy; Hilary Mason 2013</p>
+      </footer>
+
+    </div>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+       var books;
+       const num_books_to_load = 5;
+       const min_books_cached = 2;
+
+       $(document).ready(function() {
+        $.getJSON('v1/get_books?n=' + num_books_to_load, function(data) {
+          books = data;
+        });
+
+         $("#book_next").click(function() {
+            book = books.pop();
+            $("#book_title").text(book[3]);
+            $("#book_author").text(book[2]);
+            $("#book_desc").html(book[8]);
+           // $("#book_desc").html("<B>Unabridged CDs 14 CDs, 17 hours</B><BR><BR>The book everyone is falling in love with . . .");
+            $(".book_link").attr('href',book[4]);
+            $("#book_cover").attr('src',book[7]);
+
+            if (books.length < min_books_cached) { // if we're getting low, load more books!
+              $.getJSON('v1/get_books?n=' + num_books_to_load, function(data) {
+                books.push.apply(books, data);
+
+              });
+            }
+         });
+       });
+    </script>
+  </body>
+</html>
+
