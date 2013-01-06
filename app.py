@@ -1,6 +1,7 @@
 import os
 import csv
 import json
+from random import shuffle
 from flask import *
 
 app = Flask(__name__)
@@ -14,8 +15,9 @@ def hello():
 def get_books():
     n = int(request.args.get('n', 10)) # get n items, or 10 by default
 
-    r = csv.reader(open('sample_books.csv'))
+    r = csv.reader(open('reduced_books.csv'))
     books = [row for row in r]
+    shuffle(books)
     return json.dumps(books[0:n])
 
 if __name__ == '__main__':

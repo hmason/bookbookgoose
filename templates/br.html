@@ -73,9 +73,11 @@
         <a target="_blank" class="book_link" id="buyme_link" href="#">read me</a>
         <h2 id="book_title"><a target="_blank" class="book_link" id="book_title_link" href="http://www.amazon.com/Fairy-Tales-Every-Child-Should/dp/1162620455%3FSubscriptionId%3D1XJTRNMGKSD3T57YM002%26tag%3Dquasika-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1162620455"> Every Child Should Know</a></h2>
         <p id="book_author">Hamilton Wright Mabie</p>
+        <div style="height:350px;float:left;">
         <a target="_blank" class="book_link" href="http://www.amazon.com/Fairy-Tales-Every-Child-Should/dp/1162620455%3FSubscriptionId%3D1XJTRNMGKSD3T57YM002%26tag%3Dquasika-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1162620455">
           <img src="http://ecx.images-amazon.com/images/I/21fvl74O91L.jpg" id="book_cover" width="200" />
          </a>
+       </div>
         <p id="book_desc">1905. This volume contains a collection of fairy tales from a wide array of classical works, which we have grown up throughout time. These tales are immortal and include the following: Enchanted Stag; Twelve Brothers; Puss in Boots; Jack and the Beanstalk; Princess on the Pea; Ugly Duckling; Light Princess; Beauty and the Beast; Hansel and Gretel; Jack the Giant Killer; Second Voyage of Sinbad the Sailor; Story of Aladdin, or the Wonderful Lamp. Illustrated.</p>
         <div style="clear:both;"></div>
         <p><a class="btn btn-primary btn-large" id="book_next">Next &raquo;</a></p>
@@ -113,12 +115,15 @@
 
          $("#book_next").click(function() {
             book = books.pop();
-            $("#book_title").text(book[3]);
-            $("#book_author").text(book[2]);
-            $("#book_desc").html(book[8]);
-           // $("#book_desc").html("<B>Unabridged CDs 14 CDs, 17 hours</B><BR><BR>The book everyone is falling in love with . . .");
-            $(".book_link").attr('href',book[4]);
-            $("#book_cover").attr('src',book[7]);
+            desc = book[4]
+            if (desc == "") {
+              desc = "<span style='margin-left:30px;color:#666;'>(no description)</span>"
+            }
+            $("#book_title").text(book[1]);
+            $("#book_author").text(book[0]);
+            $("#book_desc").html(desc);
+            $(".book_link").attr('href',book[2]);
+            $("#book_cover").attr('src',book[3]);
 
             if (books.length < min_books_cached) { // if we're getting low, load more books!
               $.getJSON('v1/get_books?n=' + num_books_to_load, function(data) {
