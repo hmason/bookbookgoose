@@ -21,8 +21,13 @@
       #book_desc {
         font-size=90%;
        }
+      #book_title {
+        /* max-height:80px;
+        overflow:hidden; */
+      }
        #book_next {
          margin-top:2px;
+         float:right;
        }
        .book_link {
          color:#333;
@@ -108,30 +113,81 @@
        const num_books_to_load = 5;
        const min_books_cached = 2;
 
+       // for stripping tags and entities out of amazon item descriptions 
+       var element = document.createElement('div');
+        function decodeHTMLEntities (str) {
+          if(str && typeof str === 'string') {
+            str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+            str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+            element.innerHTML = str;
+            str = element.textContent;
+            element.textContent = '';
+          }
+          return str;
+        }
+
+        // for preloading cover images
+        function preload(arrayOfImages) {
+          $(arrayOfImages).each(function(){
+            $('<img/>')[0].src = this;
+          });
+        }
+
        $(document).ready(function() {
         $.getJSON('v1/get_books?n=' + num_books_to_load, function(data) {
           books = data;
+          book_images = new Array(data.length);
+          for (var i = 0; i < data.length; i++) {
+            book_images[i] = data[i][3];
+          }
+          preload(book_images);
         });
 
          $("#book_next").click(function() {
+            try {
             book = books.pop();
-            desc = book[4]
+            desc = book[4];
             if (desc == "") {
-              desc = "<span style='margin-left:30px;color:#666;'>(no description)</span>"
+              desc = "<span style='margin-left:30px;color:#666;'>(no description)</span>";
+            } else {
+              desc = decodeHTMLEntities(desc)
+              if (desc.length >=  480){
+                desc = desc + "..."
+              }
             }
-            $("#book_title").text(book[1]);
-            $("#book_author").text(book[0]);
+            cover = book[3];
+            if (cover == "") {
+              cover = "static/img/no-image.gif";
+            }
+            $("#book_title_link").html(book[1]);
+            $("#book_author").html(book[0]);
             $("#book_desc").html(desc);
             $(".book_link").attr('href',book[2]);
-            $("#book_cover").attr('src',book[3]);
+            $("#book_cover").attr('src',cover);
+            } catch(e) {
+            } finally { // ugly ugly
 
             if (books.length < min_books_cached) { // if we're getting low, load more books!
-              $.getJSON('v1/get_books?n=' + num_books_to_load, function(data) {
+              $.getJSON('v1/get_books?n=' + num_books_to_load + '&rand=' + Math.random(), function(data) {
                 books.push.apply(books, data);
-
+                book_images = new Array(data.length);
+                for (var i = 0; i < data.length; i++) {
+                  book_images[i] = data[i][3];
+                }
+                 preload(book_images);
               });
             }
+
+            }
          });
+
+        $(document).keypress(function(event) {
+          if (event.keyCode == 110 || event.keyCode == 106) { // the 'n' key or the 'j' key #vi4eva
+            $("#book_next").click();
+          }
+        });
+
+
        });
     </script>
   </body>

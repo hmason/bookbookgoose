@@ -6,19 +6,22 @@ from flask import *
 
 app = Flask(__name__)
 
+def get_books(n=10):
+    r = csv.reader(open('reduced_books.csv'))
+    books = [row for row in r]
+    shuffle(books)
+    return books[0:n]
+
 @app.route('/')
 def hello():
     url_for('static', filename='css/bootstrap.css')
     return render_template('br.html')
 
 @app.route('/v1/get_books', methods=['GET'])
-def get_books():
+def api_get_books():
     n = int(request.args.get('n', 10)) # get n items, or 10 by default
-
-    r = csv.reader(open('reduced_books.csv'))
-    books = [row for row in r]
-    shuffle(books)
-    return json.dumps(books[0:n])
+    books = get_books(n)
+    return json.dumps(books)
 
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
