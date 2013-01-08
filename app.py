@@ -1,13 +1,14 @@
 import os
 import csv
 import json
-from random import shuffle
+from random import shuffle, choice
 from flask import *
 
 app = Flask(__name__)
 
 def get_books(n=10):
-    r = csv.reader(open('reduced_books.csv'))
+    possible_files = os.listdir('book_data')
+    r = csv.reader(open('book_data/'+choice(possible_files)))
     books = [row for row in r]
     shuffle(books)
     return books[0:n]
