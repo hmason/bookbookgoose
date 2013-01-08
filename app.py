@@ -15,8 +15,9 @@ def get_books(n=10):
 
 @app.route('/')
 def hello():
-    url_for('static', filename='css/bootstrap.css')
-    return render_template('br.html')
+    initial_books = get_books(10)
+    book_zero = initial_books.pop()
+    return render_template('br.html', book_zero=book_zero, initial_books=initial_books)
 
 @app.route('/v1/get_books', methods=['GET'])
 def api_get_books():

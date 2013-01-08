@@ -109,7 +109,7 @@
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="static/js/bootstrap.min.js"></script>
     <script type="text/javascript">
-       var books;
+var books = {{ initial_books|safe }};
        const num_books_to_load = 5;
        const min_books_cached = 2;
 
@@ -134,6 +134,7 @@
         }
 
        $(document).ready(function() {
+         $("#book_next").click();
         $.getJSON('v1/get_books?n=' + num_books_to_load, function(data) {
           books = data;
           book_images = new Array(data.length);
