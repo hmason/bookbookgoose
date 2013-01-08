@@ -73,15 +73,15 @@
     <div class="container">
 
       <div class="hero-unit">
-        <a target="_blank" class="book_link" id="buyme_link" href="{{ book_zero[2] }}<">read me</a>
-        <h2 id="book_title"><a target="_blank" class="book_link" id="book_title_link" href="{{ book_zero[2] }}<">{{ book_zero[1] }}</a></h2>
-        <p id="book_author">{{ book_zero[0] }}</p>
+        <a target="_blank" class="book_link" id="buyme_link" href="{{ book_zero[2]|safe }}<">read me</a>
+        <h2 id="book_title"><a target="_blank" class="book_link" id="book_title_link" href="{{ book_zero[2]|safe }}<">{{ book_zero[1]|safe }}</a></h2>
+        <p id="book_author">{{ book_zero[0]|safe }}</p>
         <div style="height:350px;float:left;">
-        <a target="_blank" class="book_link" href="{{ book_zero[2] }}">
-          <img src="{{ book_zero[3] }}" id="book_cover" width="200" />
+        <a target="_blank" class="book_link" href="{{ book_zero[2]|safe }}">
+          <img src="{{ book_zero[3]|safe }}" id="book_cover" width="200" />
          </a>
        </div>
-        <p id="book_desc">{{ book_zero[4] }}</p>
+        <p id="book_desc">{{ book_zero[4]|safe }}</p>
         <div style="clear:both;"></div>
         <p><a class="btn btn-primary btn-large" id="book_next">Next &raquo;</a></p>
       </div>
