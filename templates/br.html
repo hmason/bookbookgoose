@@ -75,15 +75,15 @@
     <div class="container">
 
       <div class="hero-unit">
-        <a target="_blank" class="book_link" id="buyme_link" href="#">read me</a>
-        <h2 id="book_title"><a target="_blank" class="book_link" id="book_title_link" href="http://www.amazon.com/Fairy-Tales-Every-Child-Should/dp/1162620455%3FSubscriptionId%3D1XJTRNMGKSD3T57YM002%26tag%3Dquasika-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1162620455"> Every Child Should Know</a></h2>
-        <p id="book_author">Hamilton Wright Mabie</p>
+        <a target="_blank" class="book_link" id="buyme_link" href="{{ book_zero[2] }}<">read me</a>
+        <h2 id="book_title"><a target="_blank" class="book_link" id="book_title_link" href="{{ book_zero[2] }}<">{{ book_zero[1] }}</a></h2>
+        <p id="book_author">{{ book_zero[0] }}</p>
         <div style="height:350px;float:left;">
-        <a target="_blank" class="book_link" href="http://www.amazon.com/Fairy-Tales-Every-Child-Should/dp/1162620455%3FSubscriptionId%3D1XJTRNMGKSD3T57YM002%26tag%3Dquasika-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1162620455">
-          <img src="http://ecx.images-amazon.com/images/I/21fvl74O91L.jpg" id="book_cover" width="200" />
+        <a target="_blank" class="book_link" href="{{ book_zero[2] }}">
+          <img src="{{ book_zero[3] }}" id="book_cover" width="200" />
          </a>
        </div>
-        <p id="book_desc">1905. This volume contains a collection of fairy tales from a wide array of classical works, which we have grown up throughout time. These tales are immortal and include the following: Enchanted Stag; Twelve Brothers; Puss in Boots; Jack and the Beanstalk; Princess on the Pea; Ugly Duckling; Light Princess; Beauty and the Beast; Hansel and Gretel; Jack the Giant Killer; Second Voyage of Sinbad the Sailor; Story of Aladdin, or the Wonderful Lamp. Illustrated.</p>
+        <p id="book_desc">{{ book_zero[4] }}</p>
         <div style="clear:both;"></div>
         <p><a class="btn btn-primary btn-large" id="book_next">Next &raquo;</a></p>
       </div>
