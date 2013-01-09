@@ -217,8 +217,14 @@
         $(document).keypress(function(event) {
           if (event.keyCode == 110 || event.keyCode == 106) { // the 'n' key or the 'j' key #vi4eva
             $("#book_next").click();
+          } else {
+            if (event.keyCode == 107 || event.keyCode == 98) { // the 'b' or the 'k' key
+              $("#book_back").click();
+            }
           }
-        });
+            
+          }
+        );
 
 
        });
