@@ -18,17 +18,23 @@
         float:left;
         margin:5px 10px 0 0;
       }
+      #book_author {
+        clear:both;
+      }
       #book_desc {
         font-size=90%;
        }
       #book_title {
+        clear:both;
       }
+
        #book_next {
          margin-top:2px;
          float:right;
        }
        .book_link {
          color:#333;
+         float:left;
        }
        .book_link:hover {
          color:#333;
@@ -73,7 +79,8 @@
     <div class="container">
 
       <div class="hero-unit">
-        <a target="_blank" class="book_link" id="buyme_link" href="{{ book_zero[2]|safe }}<">read me</a>
+        <a class="btn btn-primary btn-large" id="book_next">Next &raquo;</a>
+        <div style="clear:both;"></div>
         <h2 id="book_title"><a target="_blank" class="book_link" id="book_title_link" href="{{ book_zero[2]|safe }}<">{{ book_zero[1]|safe }}</a></h2>
         <p id="book_author">{{ book_zero[0]|safe }}</p>
         <div style="height:350px;float:left;">
@@ -83,7 +90,7 @@
        </div>
         <p id="book_desc">{{ book_zero[4]|safe }}</p>
         <div style="clear:both;"></div>
-        <p><a class="btn btn-primary btn-large" id="book_next">Next &raquo;</a></p>
+        <a target="_blank" class="book_link" id="buyme_link" href="{{ book_zero[2]|safe }}<">read me</a>
       </div>
 
       <div class="row">
