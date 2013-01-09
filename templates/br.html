@@ -105,7 +105,7 @@
         </div>
         <div class="span6">
           <h3>How does it work?</h3>
-          <p>Use 'n' to switch to the next book quickly. Browse until you find something you love. Books are presented randomly.</p>
+          <p><em>Hint:</em> Use 'n' to switch to the next book quickly, and 'b' to go back. Browse until you find something you love. Books are presented randomly.</p>
           <p>This site exists thanks to boostrap, flask, heroku, jquery, amazon, coffee, and literature.</p>
        </div>
       </div>
@@ -160,10 +160,11 @@
             if (cover == "") {
               cover = "static/img/no-image.gif";
             }
+            book_link = decodeURIComponent(book[2].replace(/\+/g,  " "));
             $("#book_title_link").html(book[1]);
             $("#book_author").html(book[0]);
             $("#book_desc").html(desc);
-            $(".book_link").attr('href',book[2]);
+            $(".book_link").attr('href',book_link);
             $("#book_cover").attr('src',cover);
         }
 
