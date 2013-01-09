@@ -32,6 +32,9 @@
          margin-top:2px;
          float:right;
        }
+       #book_back {
+         float:right;
+       }
        .book_link {
          color:#333;
          float:left;
@@ -78,18 +81,19 @@
     <div class="container">
 
       <div class="hero-unit">
+         <a target="_blank" class="book_link" id="buyme_link" href="#">read me</a>
         <a class="btn btn-primary btn-large" id="book_next">Next &raquo;</a>
         <div style="clear:both;"></div>
-        <h2 id="book_title"><a target="_blank" class="book_link" id="book_title_link" href="{{ book_zero[2]|safe }}<">{{ book_zero[1]|safe }}</a></h2>
-        <p id="book_author">{{ book_zero[0]|safe }}</p>
+        <h2 id="book_title"><a target="_blank" class="book_link" id="book_title_link" href="#">Loading...</a></h2>
+        <p id="book_author">&nbsp;</p>
         <div style="height:350px;float:left;">
-        <a target="_blank" class="book_link" href="{{ book_zero[2]|safe }}">
-          <img src="{{ book_zero[3]|safe }}" id="book_cover" width="200" />
+        <a target="_blank" class="book_link" href="#">
+          <img src="static/img/no-image.gif" id="book_cover" width="200" />
          </a>
        </div>
-        <p id="book_desc">{{ book_zero[4]|safe }}</p>
+        <p id="book_desc">&nbsp;</p>
         <div style="clear:both;"></div>
-        <a target="_blank" class="book_link" id="buyme_link" href="{{ book_zero[2]|safe }}<">read me</a>
+        <a class="btn btn-primary btn-large" id="book_back">Back &laquo;</a>
       </div>
 
       <div class="row">
@@ -116,7 +120,8 @@
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="static/js/bootstrap.min.js"></script>
     <script type="text/javascript">
-var books = {{ initial_books|safe }};
+      var books = {{ initial_books|safe }};
+      var displayed_books = new Array();
        const num_books_to_load = 5;
        const min_books_cached = 2;
 
@@ -140,20 +145,8 @@ var books = {{ initial_books|safe }};
           });
         }
 
-       $(document).ready(function() {
-         $("#book_next").click();
-        $.getJSON('v1/get_books?n=' + num_books_to_load, function(data) {
-          books = data;
-          book_images = new Array(data.length);
-          for (var i = 0; i < data.length; i++) {
-            book_images[i] = data[i][3];
-          }
-          preload(book_images);
-        });
-
-         $("#book_next").click(function() {
-            try {
-            book = books.pop();
+        // put the book into the page
+        function displayBook(book) {
             desc = book[4];
             if (desc == "") {
               desc = "<span style='margin-left:30px;color:#666;'>(no description)</span>";
@@ -172,22 +165,54 @@ var books = {{ initial_books|safe }};
             $("#book_desc").html(desc);
             $(".book_link").attr('href',book[2]);
             $("#book_cover").attr('src',cover);
+        }
+
+       $(document).ready(function() {
+        $.getJSON('v1/get_books?n=' + num_books_to_load, function(data) {
+          books = data;
+          book_images = new Array(data.length);
+          for (var i = 0; i < data.length; i++) {
+            book_images[i] = data[i][3];
+          }
+          preload(book_images);
+        });
+
+         $("#book_next").click(function() {
+            try {
+              book = books.pop();
+              displayBook(book);
+              displayed_books.push(book);
             } catch(e) {
             } finally { // ugly ugly
 
-            if (books.length < min_books_cached) { // if we're getting low, load more books!
-              $.getJSON('v1/get_books?n=' + num_books_to_load + '&rand=' + Math.random(), function(data) {
-                books.push.apply(books, data);
-                book_images = new Array(data.length);
-                for (var i = 0; i < data.length; i++) {
-                  book_images[i] = data[i][3];
-                }
-                 preload(book_images);
-              });
-            }
+              if (books.length < min_books_cached) { // if we're getting low, load more books!
+                $.getJSON('v1/get_books?n=' + num_books_to_load + '&rand=' + Math.random(), function(data) {
+                  books.push.apply(books, data);
+                  book_images = new Array(data.length);
+                  for (var i = 0; i < data.length; i++) {
+                    book_images[i] = data[i][3];
+                  }
+                   preload(book_images);
+                });
+              }
 
             }
          });
+
+        $("#book_next").click(); // load our first book!
+
+        $("#book_back").click(function() {
+          try {
+            old_book = book;
+            books.push(book);
+            book = displayed_books.pop();
+            if (old_book == book) {
+              book = displayed_books.pop();
+            }
+            displayBook(book);
+          } catch(e) {
+          }
+        });
 
         $(document).keypress(function(event) {
           if (event.keyCode == 110 || event.keyCode == 106) { // the 'n' key or the 'j' key #vi4eva
