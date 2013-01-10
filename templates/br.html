@@ -204,11 +204,13 @@
 
         $("#book_back").click(function() {
           try {
-            old_book = book;
-            books.push(book);
-            book = displayed_books.pop();
-            if (old_book == book) {
+            if (displayed_books.length > 0) { // so you don't have to go forward through the same book
+              old_book = book;
+              books.push(book);
               book = displayed_books.pop();
+              if (old_book == book) {
+                book = displayed_books.pop();
+              }
             }
             displayBook(book);
           } catch(e) {
