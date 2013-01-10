@@ -156,6 +156,11 @@
             $('<img/>')[0].src = this;
           });
         }
+        
+        function getParameterByName(name) {
+          var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+          return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+        }
 
         // put the book into the page
         function displayBook(book) {
@@ -213,6 +218,11 @@
          });
 
         $("#book_next").click(); // load our first book!
+        
+        //auto-advancing mode if ?auto=milliseconds is added to the url 
+        if (getParameterByName("auto")){
+          setInterval(function(){$("#book_next").click()}, getParameterByName("auto"))
+        }
 
         $("#book_back").click(function() {
           try {
